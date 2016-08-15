@@ -11,7 +11,7 @@ def index():
     if request.method == 'GET':
         return render_template('index.html')
     else:
-        url = request.values.get('url')
+        url = request.form.get('url')
         if not url:
             url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         return redirect(url_for('download', url=url))
