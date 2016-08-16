@@ -6,16 +6,17 @@
   </head>
   <body>
     <div id="app">
-      <span v-html="url"></span>
+      <span v-html="title"></span><br><br>
+      <span v-html="url">
     </div>
   </body>
   <script>
-  var URL = '{{ url }}'
-
+  var data = JSON.parse('{{ metadata|tojson|safe }}')
   var app = new Vue({
     el: '#app',
     data: {
-      url: URL
+      title: data.title,
+      url: data.url
     }
   })
   </script>
