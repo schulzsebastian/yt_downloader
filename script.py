@@ -17,18 +17,11 @@ ydl_opts = {
 
 default_url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
-def download_from_url(url):
+def youtube_connector(url, download):
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         try:
-            metadata = ydl.extract_info(url, download=True)
+            metadata = ydl.extract_info(url, download=download)
         except:
-            metadata = ydl.extract_info(default_url, download=True)
-        return metadata['title'] + '.mp3'
-
-def get_url_metadata(url):
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        try:
-            data = ydl.extract_info(url, download=False)
-        except:
-            data = ydl.extract_info(default_url, download=False)
-        return {'title': data['title'], 'url': data['url']}
+            metadata = ydl.extract_info(default_url, download=download)
+            url = default_url
+        return {'title': metadata['title'], 'url': url}
