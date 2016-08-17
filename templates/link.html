@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>YT Downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+  </head>
+  <body>
+    <div id="app">
+      <p v-html="title"></p>
+      <a v-if="!loading" v-on:click="toggleLoading" href="download">Download</a>
+      <i v-else class="fa fa-spinner fa-spin"></i>
+    </div>
+  </body>
+  <script>
+  var data = JSON.parse('{{ metadata|tojson|safe }}')
+  var app = new Vue({
+    el: '#app',
+    data: {
+      title: data.title,
+      loading: false,
+    },
+    methods: {
+      toggleLoading: function(){
+        this.loading = !this.loading
+      }
+    }
+  })
+  </script>
+</html>

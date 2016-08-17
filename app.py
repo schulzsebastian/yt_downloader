@@ -21,7 +21,7 @@ def index():
 
 @app.route('/link')
 def link():
-    return render_template('download.html', metadata=session['metadata'])
+    return render_template('link.html', metadata=session['metadata'])
 
 
 @app.route('/download')
