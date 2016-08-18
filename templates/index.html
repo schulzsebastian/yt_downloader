@@ -2,11 +2,31 @@
 <html>
   <head>
     <title>YT Downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='js/vue.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
   </head>
   <body>
-    <form method='post'>
-      <input type='text' name='url'/><br>
-      <input type='submit' value='Get MP3'/>
+    <form id="app">
+      <input v-model="url"/><br>
+      <input v-if="!loading" type='submit' v-on:click="getmp3"/>
+      <i v-else class="fa fa-spinner fa-spin"></i>
     </form>
   </body>
+  <script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+        url: '',
+        loading: false
+    },
+    methods: {
+        getmp3: function(){
+            var self = this;
+            self.loading = true
+            $.post("",{url:self.url},window.location='link')
+        }
+    }
+  })
+  </script>
 </html>

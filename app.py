@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from script import youtube_connector
-from flask import Flask, request, render_template, redirect, \
-    url_for, session, send_from_directory
+from flask import Flask, request, render_template, session
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'xxx'
@@ -15,23 +14,18 @@ def index():
         return render_template('index.html')
     else:
         url = request.form.get('url')
-        session['metadata'] = youtube_connector(url, False)
-        return redirect(url_for('link'))
+        session['metadata'] = youtube_connector(url)
+        return ('', 302)
 
 
 @app.route('/link')
 def link():
-    return render_template('link.html', metadata=session['metadata'])
+    print session['metadata']
+    return render_template('link.html',
+                           path=session['metadata']['path'],
+                           filename=session['metadata']['filename'],
+                           title=session['metadata']['title'])
 
-
-@app.route('/download')
-def download():
-    file = youtube_connector(session['metadata']['url'], True)
-    filename = file['title'].encode('utf-8') + '.mp3'
-    return send_from_directory(app.static_folder,
-                               filename,
-                               attachment_filename=filename,
-                               as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)
