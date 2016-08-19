@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from script import youtube_connector
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, redirect, url_for
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'xxx'
@@ -15,7 +15,7 @@ def index():
     else:
         url = request.form.get('url')
         session['metadata'] = youtube_connector(url)
-        return ('', 302)
+        return redirect(url_for('link'))
 
 
 @app.route('/link')

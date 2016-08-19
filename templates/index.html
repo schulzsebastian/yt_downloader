@@ -7,11 +7,11 @@
     <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
   </head>
   <body>
-    <form id="app">
+    <div id="app">
       <input v-model="url"/><br>
-      <input v-if="!loading" type='submit' v-on:click="getmp3"/>
+      <input type="submit" v-if="!loading" v-on:click="getmp3"/>
       <i v-else class="fa fa-spinner fa-spin"></i>
-    </form>
+    </div>  
   </body>
   <script>
   var app = new Vue({
@@ -24,7 +24,7 @@
         getmp3: function(){
             var self = this;
             self.loading = true
-            $.post("",{url:self.url},window.location='link')
+            $.post("",{url:self.url},console.log(self.loading))
         }
     }
   })
