@@ -17,15 +17,23 @@
   var app = new Vue({
     el: '#app',
     data: {
-        url: '',
-        loading: false
+      url: '',
+      loading: false
     },
     methods: {
-        getmp3: function(){
-            var self = this;
-            self.loading = true
-            $.post("",{url:self.url},console.log(self.loading))
-        }
+      getmp3: function(){
+        var self = this;
+        self.loading = true
+        $.ajax({
+          type: 'POST',
+          url: '.',
+          data: JSON.stringify({url:self.url}),
+          contentType: 'application/json',
+          success: function(data){
+            window.location = './link'
+          }
+        })
+      }
     }
   })
   </script>
