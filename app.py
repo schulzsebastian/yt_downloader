@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from script import youtube_connector
-from flask import Flask, request, render_template, session, redirect, url_for
+from flask import Flask, request, render_template, session, jsonify
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'xxx'
@@ -13,14 +13,13 @@ def index():
     if request.method == 'GET':
         return render_template('index.html')
     else:
-        url = request.form.get('url')
+        url = request.get_json(force=True)['url']
         session['metadata'] = youtube_connector(url)
-        return redirect(url_for('link'))
+        return jsonify({'url': url})
 
 
 @app.route('/link')
 def link():
-    print session['metadata']
     return render_template('link.html',
                            path=session['metadata']['path'],
                            filename=session['metadata']['filename'],
