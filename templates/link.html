@@ -2,8 +2,21 @@
 <html>
   <head>
     <title>YT Downloader</title>
+    <script src="{{ url_for('static', filename='js/vue.js') }}"></script>
   </head>
   <body>
-  	<a href="{{path}}" download="{{filename}}">{{title}}</a>
+    <div id="app">
+      <a :href="path" :download="filename" v-text="title"></a>
+    </div>
   </body>
+   <script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      path: '{{ path }}',
+      filename: '{{ filename }}',
+      title: '{{ title }}'
+    }
+  })
+  </script>
 </html>
