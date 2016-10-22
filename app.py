@@ -1,30 +1,39 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from script import youtube_connector
-from flask import Flask, request, render_template, session, jsonify
+from flask import Flask, request, render_template, send_file
+import uuid
+import youtube_dl
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'xxx'
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    if request.method == 'GET':
-        return render_template('index.html')
-    else:
-        url = request.get_json(force=True)['url']
-        session['metadata'] = youtube_connector(url)
-        return jsonify({'url': url})
+    return render_template('index.html')
 
 
-@app.route('/link')
-def link():
-    return render_template('link.html',
-                           path=session['metadata']['path'],
-                           filename=session['metadata']['filename'],
-                           title=session['metadata']['title'])
-
+@app.route('/download')
+def download():
+    url = request.args.get('url')
+    if not url:
+        url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+    unique_filename = str(uuid.uuid4())
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+        'outtmpl': 'static/files/' + unique_filename + '.%(ext)s'
+    }
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        title = ydl.extract_info(url)['title']
+        path = 'static/files/' + unique_filename + '.mp3'
+    return send_file(path,
+                     as_attachment=True,
+                     attachment_filename=title.encode('utf-8') + '.mp3')
 
 if __name__ == '__main__':
     app.run(debug=True)

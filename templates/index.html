@@ -4,14 +4,13 @@
     <title>YT Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
     <script src="{{ url_for('static', filename='js/vue.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vue-resource.js') }}"></script>
   </head>
   <body>
     <div id="app">
       <input v-model="url"/><br>
-      <input type="submit" v-if="!loading" v-on:click="getmp3"/>
-      <i v-else class="fa fa-spinner fa-spin"></i>
-    </div>  
+      <a :href="link">Download</a>
+    </div>
   </body>
   <script>
   var app = new Vue({
@@ -19,22 +18,12 @@
     data: {
       url: '',
       loading: false
-    },
-    methods: {
-      getmp3: function(){
-        var self = this;
-        self.loading = true
-        $.ajax({
-          type: 'POST',
-          url: '.',
-          data: JSON.stringify({url:self.url}),
-          contentType: 'application/json',
-          success: function(data){
-            window.location = './link'
+  },
+      computed: {
+          link: function(){
+              return './download?url='+this.url
           }
-        })
       }
-    }
   })
   </script>
 </html>
